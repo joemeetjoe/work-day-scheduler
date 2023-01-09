@@ -17,6 +17,7 @@ N/A
 If you would like to use this project, please click on the link below: 
 
 https://joemeetjoe.github.io/work-day-scheduler/
+![Screenshot Capture - 2023-01-09 - 09-04-41](https://user-images.githubusercontent.com/119348225/211327006-afff2345-e840-4acc-9657-d935c8865cd1.png)
 
 
 ## License
