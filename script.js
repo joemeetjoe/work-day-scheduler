@@ -1,6 +1,4 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+// function that only runs if the DOM is loaded
 $(function () {
 
 // save all the button classes to a variable
@@ -15,10 +13,9 @@ $(function () {
   localStorage.setItem(timeBlock, scheduleContent);
   });
 
+  
   // targetting the div "time-block-container's" chilldren elements with the class row to use that as a loop.
   var timeBlock = $('#time-block-container').children('.row');
-  
-  
   // for the amount of areas in time block
   for (var i = 0; i < timeBlock.length; i++){
     // get the current positions attribute id
@@ -28,22 +25,49 @@ $(function () {
     // set the current positions child, text area to the value found from storage
     $(timeBlock[i]).children("textarea").val(whatsInStorage);
   }
-
-  var time = dayjs().format('h');
-
-  console.log(time);
-
-
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
   
   
-  // TODO: Add code to display the current date in the header of the page.
+  // calling dayjs current time and saving it to var current day
   var currentDay = dayjs().format('dddd, MMMM, Do');
-  $('')
+  // making the header equal current day
+  $('#currentDay').text(currentDay);
+
+
+  // grabbing the current hour from dayjs in the single hour format
+  let currentTime = dayjs().format('ha');
+  // setting some empty variables for the index position of the current time id and an 
+  // empty array to add the slots that do not match the current time to.
+  let currentPosition;
+  let doesntEqualTime = [];
+  // loop through all of the time block slots
+  for (var i = 0; i < timeBlock.length; i ++){
+    // for the index position of time slot
+    var timeBlockPos = timeBlock[i];
+    // for the attribute id of each time block index
+    var timeBlockPosAttr = $(timeBlock[i]).attr('id');
+    // if the current time does not equal the attribute for the current position, add it to
+    // the empty array
+    if (currentTime != timeBlockPosAttr){
+      doesntEqualTime.push(i);
+    };
+    // if the current time does equal the time block id in the array, set the class attr
+    // to present and save the current position to a variable
+    if (currentTime == timeBlockPosAttr){
+      $(timeBlockPos).addClass('present');
+      currentPosition = i;
+    };
+  }
+  // loop through the doesnt equal time array
+  for (var i = 0; i <doesntEqualTime.length; i ++){
+    // if the doesnt equal time position in the array is less than the current time position
+    // in the array, set those position id's to the past
+    if (doesntEqualTime[i] < currentPosition){
+      var peeper = doesntEqualTime[i];
+     $(timeBlock[peeper]).addClass('past');
+    //  else if they are more than the current position, set them equal to the future
+    } else if (doesntEqualTime[i] > currentPosition){
+      var peeper = doesntEqualTime[i];
+      $(timeBlock[peeper]).addClass('future');
+    };
+    };
 });
